@@ -1,6 +1,4 @@
 use bevy::prelude::*;
-use gfx::GraphicsWaitEvent;
-use input::PlayerInputReadyEvent;
 
 mod config;
 mod state;
@@ -14,6 +12,11 @@ mod player;
 mod input;
 mod actions;
 mod manager;
+pub mod pathfind;
+mod mapgen;
+mod random;
+mod bitgrid;
+mod rect;
 
 fn main() {
     App::new()
@@ -41,6 +44,7 @@ fn main() {
                 actions::ActionsPlugin,
                 assets::AssetPlugin,
                 board::BoardPlugin,
+                pieces::PiecesPlugin,
                 gfx::GraphicsPlugin,
                 player::PlayerPlugin,
                 input::InputPlugin,

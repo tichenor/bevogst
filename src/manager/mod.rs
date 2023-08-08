@@ -2,6 +2,7 @@ use bevy::prelude::*;
 
 use crate::{state::{MainState, GameState}, input::PlayerInputReadyEvent, actions::{ActionsCompleteEvent, InvalidPlayerActionEvent, TickEvent}, gfx::GraphicsWaitEvent};
 
+/// This [Plugin] puts together the scheduling/flow of the game logic during gameplay. 
 pub struct ManagerPlugin;
 
 impl Plugin for ManagerPlugin {

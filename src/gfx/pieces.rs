@@ -12,7 +12,7 @@ pub fn spawn_piece_renderer(
     for (entity, pos, piece) in query.iter() {
         let sprite_idx = match piece.kind.as_str() {
             "Player" => 1,
-            _ => 63,
+            _ => 63, // "?"
         };
         let mut sprite = TextureAtlasSprite::new(sprite_idx);
         sprite.custom_size = Some(Vec2::splat(TILE_SIZE));

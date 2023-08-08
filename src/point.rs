@@ -2,7 +2,7 @@ use std::ops::{Add, AddAssign, Sub, SubAssign, Div, Mul};
 
 
 
-#[derive(Clone, Copy, Default, Hash, PartialEq, Eq)]
+#[derive(Clone, Copy, Default, Hash, PartialEq, Eq, Debug, Ord, PartialOrd)]
 pub struct Point {
     pub x: i32,
     pub y: i32,
@@ -32,6 +32,14 @@ impl Point {
 
     pub fn new(x: i32, y: i32) -> Self {
         Point { x, y }
+    }
+
+    pub fn dist_manhattan(&self, other: Point) -> i32 {
+        (self.x - other.x).abs() + (self.y - other.y).abs()
+    }
+
+    pub fn dist_chebyshev(&self, other: Point) -> i32 {
+        i32::max((self.x - other.x).abs(), (self.y - other.y).abs())
     }
 }
 
