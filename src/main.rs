@@ -17,6 +17,7 @@ mod mapgen;
 mod random;
 mod bitgrid;
 mod rect;
+mod saveload;
 
 fn main() {
     App::new()

@@ -25,7 +25,7 @@ pub struct CurrentBoard {
     pub tiles: HashMap<Point, Entity>
 }
 
-#[derive(Resource, Clone)]
+#[derive(Resource, Clone, Debug)]
 pub struct Board {
     pub width: u32,
     pub height: u32,

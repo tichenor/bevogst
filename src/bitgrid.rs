@@ -6,7 +6,8 @@ use serde::{Serialize, Deserialize};
 pub struct BitGrid {
     width: u32,
     height: u32,
-    #[serde(with = "crate::io::saveload::bit_vec")]
+
+    #[serde(with = "crate::saveload::bit_vec")]
     bv: BitVec,
 }
 

@@ -1,13 +1,18 @@
 
 mod simple_rooms;
 mod common;
+mod room_corridors;
+mod room_start_pos;
+mod bsp;
 
 use crate::{point::Point, random::{self, PRngBuilder}, config, board::{Board, components::Tile}, rect::Rect};
 
+#[derive(Debug)]
 pub struct BuildData {
     pub board: Board,
     pub starting_position: Option<Point>,
     pub rects: Option<Vec<Rect>>,
+    pub corridors: Option<Vec<Vec<usize>>>,
     pub history: Vec<Vec<Tile>>,
 }
 
@@ -47,6 +52,7 @@ impl MapBuilder {
                 board: Board::new(depth, width, height),
                 starting_position: None,
                 rects: None,
+                corridors: None,
                 history: Vec::new(),
             }
         }

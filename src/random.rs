@@ -1,6 +1,6 @@
 use std::hash::Hasher;
 
-use rand::{SeedableRng, Rng, distributions::uniform::{SampleUniform, SampleRange}};
+use rand::{SeedableRng, Rng, distributions::{uniform::{SampleUniform, SampleRange}, Standard}, prelude::Distribution};
 use rand_xoshiro::Xoroshiro128PlusPlus;
 use wyhash::WyHash;
 
@@ -20,6 +20,14 @@ impl PRng {
 
     pub fn gen_ratio(&mut self, numerator: u32, denominator: u32) -> bool {
         self.0.gen_ratio(numerator, denominator)
+    }
+
+    pub fn gen<T>(&mut self) -> T
+    where 
+        Standard: Distribution<T>,
+    {
+        // same as self.0.gen()
+        Standard.sample(&mut self.0)
     }
 }
 

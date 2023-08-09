@@ -9,7 +9,7 @@ pub struct Position {
     pub p: Point
 }
 
-#[derive(Component, Clone, Copy)]
+#[derive(Component, Clone, Copy, Debug, PartialEq, Eq)]
 pub enum Tile {
     Floor,
     Wall,
