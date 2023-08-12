@@ -29,6 +29,10 @@ impl PRng {
         // same as self.0.gen()
         Standard.sample(&mut self.0)
     }
+
+    pub fn gen_bool(&mut self, p: f64) -> bool {
+        self.0.gen_bool(p)
+    }
 }
 
 pub struct PRngBuilder {

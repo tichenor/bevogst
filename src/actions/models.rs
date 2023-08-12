@@ -2,7 +2,7 @@ use std::fmt::Debug;
 
 use bevy::prelude::*;
 
-use crate::{point::Point, board::{CurrentBoard, components::Position}, pieces::components::{TileOccupier, Health}};
+use crate::{point::Point, board::{components::Position, Board}, pieces::components::{TileOccupier, Health}};
 use super::Action;
 
 
@@ -23,8 +23,8 @@ impl MoveToAction {
 
 impl Action for MoveToAction {
     fn execute(&self, world: &mut World) -> Result<Vec<Box<dyn Action>>, ()> {
-        let Some(board) = world.get_resource::<CurrentBoard>() else { return Err(()) };
-        if !board.tiles.contains_key(&self.destination) { return Err(()) };
+        let Some(board) = world.get_resource::<Board>() else { return Err(()) };
+        if !board.in_bounds_xy(self.destination.x, self.destination.y) { return Err(()) };
         
         // If there are any entities at the target destination that already occupy that tile,
         // the action is not possible.

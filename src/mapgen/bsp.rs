@@ -127,11 +127,10 @@ impl BspMapBuilder {
     }
 
     fn is_possible(&self, rect: Rect, board: &Board) -> bool {
-        let mut expanded = rect;
-        let x1 = expanded.x1 as i32 - 2;
-        let y1 = expanded.y1 as i32 - 2;
-        let x2 = expanded.x2 as i32 + 2;
-        let y2 = expanded.y2 as i32 + 2;
+        let x1 = rect.x1 as i32 - 2;
+        let y1 = rect.y1 as i32 - 2;
+        let x2 = rect.x2 as i32 + 2;
+        let y2 = rect.y2 as i32 + 2;
 
         let mut can_build = true;
 

@@ -4,7 +4,7 @@ mod pieces;
 
 use bevy::prelude::*;
 
-use crate::board::components::Position;
+use crate::{board::components::Position, state::MainState, mapgen::MapGenSet};
 
 pub const TILE_SIZE: f32 = 32.;
 pub const TILE_Z: f32 = 0.;
@@ -27,8 +27,8 @@ impl Plugin for GraphicsPlugin {
         app
             .add_event::<GraphicsWaitEvent>()
             .add_systems(Startup, assets::load_assets)
-            .add_systems(Update, tiles::spawn_tile_renderer)
             .add_systems(Update, pieces::spawn_piece_renderer)
+            .add_systems(OnEnter(MainState::Game), tiles::spawn_tile_renderer.in_set(MapGenSet::Spawning))
             .add_systems(Update, pieces::update_piece_position);
 
     }

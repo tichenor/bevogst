@@ -1,7 +1,6 @@
 use bevy::prelude::*;
-use rand::Rng;
 
-use crate::{pieces::components::{Actor, Walker, TileOccupier, Fighter}, player::Player, board::{components::Position, CurrentBoard}, point::Point, pathfind};
+use crate::{pieces::components::{Actor, Walker, TileOccupier, Fighter}, player::Player, board::{components::Position, Board}, point::Point, pathfind};
 
 use super::{ActorQueue, models::{MoveToAction, MeleeAttackAction}, InvalidPlayerActionEvent, NextActorEvent, PendingActions};
 
@@ -108,7 +107,7 @@ pub fn plan_walk(
     queue: Res<ActorQueue>,
     player_query: Query<&Position, With<Player>>,
     occupier_query: Query<&Position, With<TileOccupier>>,
-    board: Res<CurrentBoard>,
+    board: Res<Board>,
 ) {
     let Some(entity) = queue.0.get(0) else { return };
     let Ok((pos, mut actor)) = query.get_mut(*entity) else { 
@@ -126,7 +125,7 @@ pub fn plan_walk(
     let path_to_player = pathfind::path_astar(
         pos.p, 
         player_position.p, 
-        &board.tiles.keys().cloned().collect(), 
+        &board.iter_points().collect(), 
         &occupier_query.iter().map(|pos| pos.p).collect()
     );
 

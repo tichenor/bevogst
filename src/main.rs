@@ -19,6 +19,19 @@ mod bitgrid;
 mod rect;
 mod saveload;
 
+#[derive(Resource)]
+pub struct GameSeed(u64);
+
+impl Default for GameSeed {
+    fn default() -> Self {
+        let game_seed: u64 = std::env::args()
+            .nth(1)
+            .and_then(|arg| arg.as_str().parse().ok())
+            .unwrap_or_else(rand::random);
+        Self(game_seed)
+    }
+}
+
 fn main() {
     App::new()
         .add_plugins(
@@ -50,8 +63,10 @@ fn main() {
                 player::PlayerPlugin,
                 input::InputPlugin,
                 manager::ManagerPlugin,
+                mapgen::MapGenPlugin,
+                camera::CameraPlugin,
             )
         )
-        .add_systems(Startup, camera::setup)
+        .init_resource::<GameSeed>()
         .run()
 }

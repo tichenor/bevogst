@@ -8,7 +8,7 @@ const MIN_HEIGHT: u32 = config::map::ROOM_MIN_HEIGHT;
 const MAX_WIDTH: u32 = config::map::ROOM_MAX_WIDTH;
 const MAX_HEIGHT: u32 = config::map::ROOM_MAX_HEIGHT;
 
-pub struct SimpleRoomBuilder;
+pub(super) struct SimpleRoomBuilder;
 
 impl SimpleRoomBuilder {
     pub fn new() -> Box<Self> {

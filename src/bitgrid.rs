@@ -15,8 +15,6 @@ impl BitGrid {
 
     /// Create a new [BitGrid] with the given width and height.
     pub fn new(width: u32, height: u32) -> Self {
-        assert!(width >= 0);
-        assert!(height >= 0);
 
         Self {
             width,

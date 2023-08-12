@@ -1,4 +1,4 @@
-use std::collections::VecDeque;
+use std::{collections::VecDeque, fmt::Display};
 
 use bevy::{prelude::*, app::AppExit};
 
@@ -51,3 +51,4 @@ fn handle_movement_keys(
         ev_input.send(PlayerInputReadyEvent);
     }
 }
+

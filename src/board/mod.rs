@@ -2,7 +2,7 @@ use std::collections::HashMap;
 
 use bevy::prelude::*;
 
-use crate::{point::Point, state::MainState, bitgrid::BitGrid, rect::Rect};
+use crate::{point::Point, state::MainState, bitgrid::BitGrid, rect::Rect, mapgen::MapGenSet};
 
 use self::components::Tile;
 
@@ -14,15 +14,10 @@ pub struct BoardPlugin;
 
 impl Plugin for BoardPlugin {
     fn build(&self, app: &mut App) {
-        app.init_resource::<CurrentBoard>()
-            .add_systems(OnEnter(MainState::Game), systems::spawn_board);
+        app.init_resource::<Board>()
+            .add_systems(OnEnter(MainState::Game), systems::spawn_board.in_set(MapGenSet::Generation));
 
     }
-}
-
-#[derive(Default, Resource)]
-pub struct CurrentBoard {
-    pub tiles: HashMap<Point, Entity>
 }
 
 #[derive(Resource, Clone, Debug)]
@@ -31,6 +26,17 @@ pub struct Board {
     pub height: u32,
     tiles: Vec<Tile>,
     pub seen: BitGrid,
+}
+
+impl Default for Board {
+    fn default() -> Self {
+        Self {
+            width: 2,
+            height: 2,
+            tiles: Vec::new(),
+            seen: BitGrid::new(0, 0),
+        }
+    }
 }
 
 impl Board {
@@ -67,13 +73,19 @@ impl Board {
     }
 
     pub fn set_tile_xy(&mut self, x: u32, y: u32, tile: Tile) {
-        assert!(self.in_bounds_xy(x, y));
-        self.tiles[self.xy_to_index(x, y)] = tile;
+        assert!(self.in_bounds_xy(x as i32, y as i32));
+        let i = self.xy_to_index(x, y);
+        self.tiles[i] = tile;
     }
 
     pub fn set_tile(&mut self, i: usize, tile: Tile) {
         assert!(self.in_bounds(i));
         self.tiles[i] = tile;
+    }
+
+    pub fn set_all_tiles(&mut self, tiles: Vec<Tile>) {
+        assert!(tiles.len() == (self.width * self.height) as usize);
+        self.tiles = tiles;
     }
 
     pub fn set_rect(&mut self, rect: &Rect, tile: Tile) {
@@ -101,17 +113,28 @@ impl Board {
         (0, 0, self.width - 1, self.height - 1)
     }
 
-    pub fn in_bounds_xy(&self, x: u32, y: u32) -> bool {
+    pub fn in_bounds_xy(&self, x: i32, y: i32) -> bool {
         let b = self.bounds();
-        x >= b.0 
-        && x <= b.2
-        && y >= b.1
-        && y <= b.3
+        x >= b.0 as i32 
+        && x <= b.2 as i32
+        && y >= b.1 as i32
+        && y <= b.3 as i32
     }
 
     pub fn in_bounds(&self, i: usize) -> bool {
         let (x, y) = self.index_to_xy(i);
-        self.in_bounds_xy(x, y)
+        self.in_bounds_xy(x as i32, y as i32)
+    }
+
+    /// Iteration order is (0, 0), (1, 0), ... (self.width - 1, 0), (0, 1), (1, 1), ...
+    /// ..., (self.width - 1, self.height - 1)
+    pub fn iter_points(&self) -> impl Iterator<Item = Point> + '_ {
+        let xs = 0..self.width;
+
+        xs.flat_map(move |x| {
+            std::iter::repeat(x).zip(0..self.height)
+        })
+            .map(|(x, y)| (x, y).into())
     }
 }
 
